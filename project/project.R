@@ -26,9 +26,15 @@ apply(pr_mat,2,shapiro.test)
 
 ######################################################### ######################################################### 
 
+write.csv(morvar, file = "matrix.csv")
+
+
 morvar <- GSE21667_series_matrix
 attach(morvar)
 names(morvar)
+
+s1 <- sample1
+shapiro.test(s1$GSM534572)
 
 first<-glm(ID_REF~GSM534572,family=binomial(link="logit"))
 first<-glm(ID_REF~GSM534572,family=poisson(link="logit"))

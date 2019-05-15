@@ -1,0 +1,39 @@
+---
+title: "First_Report"
+author: "Dima"
+date: "May 15, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Introduction
+
+What this ex is about
+
+#Summary
+
+What is data bout abstract, title, etc, etc
+
+#Data descriptiom
+
+```{r}
+boxplot(matt,col=c(4,2,45,7))
+```
+
+```{r}
+colMeans(matt)
+```
+
+```{r}
+apply(matt,2, shapiro.test)
+```
+
+```{r}
+apply(matt,2, hist)
+```
+
+```{r}
+```
