@@ -1,0 +1,35 @@
+---
+title: "Untitled"
+output: html_document
+---
+## Summary	
+The obligate intracellular bacterium Chlamydia trachomatis replicates in a cytosolic vacuole in human epithelial cells. Infection of human cells with C. trachomatis causes substantial changes to many host cell signalling pathways but the molecular basis of such influence is not well understood. Studies of gene transcription of the infected cell have shown altered transcription of many host cell genes, indicating a transcriptional response of the host cell to the infection. We here describe that infection of human cells with C. trachomatis as well as infection of murine cells with C. muridarum profoundly inhibits protein synthesis of the infected host cell. This inhibition was accompanied by changes to the ribosomal profile of the infected cell indicative of a block of translation initiation, most likely as part of a stress response. The chlamydial protease CPAF also reduced protein synthesis in uninfected cells although CPAF-deficient C. trachomatis showed no defect in this respect. Analysis of polysomal mRNA as a proxy of actively transcribed mRNA identified a number of biological processes differentially affected by chlamydial infection. Mapping of differentially regulated genes onto a protein interaction network identified nodes of up- and down-regulated networks during chlamydial infection. Proteomic analysis of protein synthesis further suggested translational regulation of host cell functions by chlamydial infection. These results demonstrate reprogramming of the host cell during chlamydial infection through the alteration of protein synthesis.
+ 	
+## Overall design	
+HeLa cells were infected with C. trachomatis L2 for 33h or left untreated and polysomal as well as total RNA was isolated.
+
+## Citations
+Ohmer M, Tzivelekidis T, Niedenführ N, Volceanov-Hahn L et al. Infection of HeLa cells with Chlamydia trachomatis inhibits protein synthesis and causes multiple changes to host cell pathways. Cell Microbiol 2019 Apr;21(4):e12993. PMID: 30551267
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+targets <- read.csv("targetsD.txt", sep="")
+```
+
+```{r}
+expressions <- read.delim("GSE114556_series_matrix.txt", header=TRUE,row.names = 1)
+```
+
+```{r}
+dim(expressions)
+summary(expressions)
+```
+
+```{r}
+boxplot(expressions, col = c(2,2,2,3,3,3,4,4,4,5,5,5))
+```
+
