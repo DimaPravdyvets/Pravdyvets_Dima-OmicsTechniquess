@@ -21,7 +21,7 @@ targets <- read.csv("targetsD.txt", sep="")
 ```
 
 ```{r}
-expressions <- read.delim("GSE114556_series_matrix.txt", header=TRUE,row.names = 1)
+expressions <- read.csv("GSE114556_series_matrix.csv", header=TRUE,row.names = 1)
 ```
 
 ```{r}
@@ -30,6 +30,19 @@ summary(expressions)
 ```
 
 ```{r}
-boxplot(expressions, col = c(2,2,2,3,3,3,4,4,4,5,5,5))
+colMeans(expressions)
 ```
 
+
+```{r}
+boxplot(expressions, col = c(34,34,34,23,23,23,67,67,67,93,93,93))
+```
+
+```{r}
+t.test(expressions$GSM3143969)
+
+```
+
+```{r}
+
+```
