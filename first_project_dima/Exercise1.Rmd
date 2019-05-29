@@ -1,0 +1,188 @@
+---
+title: "Untitled"
+output: pdf_document
+---
+## Summary	
+The obligate intracellular bacterium Chlamydia trachomatis replicates in a cytosolic vacuole in human epithelial cells. Infection of human cells with C. trachomatis causes substantial changes to many host cell signalling pathways but the molecular basis of such influence is not well understood. Studies of gene transcription of the infected cell have shown altered transcription of many host cell genes, indicating a transcriptional response of the host cell to the infection. We here describe that infection of human cells with C. trachomatis as well as infection of murine cells with C. muridarum profoundly inhibits protein synthesis of the infected host cell. This inhibition was accompanied by changes to the ribosomal profile of the infected cell indicative of a block of translation initiation, most likely as part of a stress response. The chlamydial protease CPAF also reduced protein synthesis in uninfected cells although CPAF-deficient C. trachomatis showed no defect in this respect. Analysis of polysomal mRNA as a proxy of actively transcribed mRNA identified a number of biological processes differentially affected by chlamydial infection. Mapping of differentially regulated genes onto a protein interaction network identified nodes of up- and down-regulated networks during chlamydial infection. Proteomic analysis of protein synthesis further suggested translational regulation of host cell functions by chlamydial infection. These results demonstrate reprogramming of the host cell during chlamydial infection through the alteration of protein synthesis.
+ 	
+## Overall design	
+HeLa cells were infected with C. trachomatis L2 for 33h or left untreated and polysomal as well as total RNA was isolated.
+
+## Citations
+Ohmer M, Tzivelekidis T, Niedenführ N, Volceanov-Hahn L et al. Infection of HeLa cells with Chlamydia trachomatis inhibits protein synthesis and causes multiple changes to host cell pathways. Cell Microbiol 2019 Apr;21(4):e12993. PMID: 30551267
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+targets <- read.csv("targets.txt", sep="")
+```
+
+```{r}
+expressions <- read.csv("GSE114556_series_matrix.csv", header=TRUE,row.names = 1)
+```
+
+```{r}
+dim(expressions)
+summary(expressions)
+```
+
+```{r}
+colMeans(expressions)
+```
+
+
+```{r}
+boxplot(log(expressions), col = c(34,34,34,23,23,23,67,67,67,93,93,93))
+```
+
+```{r}
+
+## ----simulateData--------------------------------------------------------
+expressionValues <- data.matrix(expressions,rownames.force = NA)
+```
+
+
+
+```{r}
+## ----simulateGeneInfo----------------------------------------------------
+myGenes <-  rownames(expressionValues)
+myGenes
+```
+
+```{r}
+
+## ----simulateInfo--------------------------------------------------------
+myInfo=list(myName="Dmytro Pravdyvets", myLab="Bomics Lab", 
+          myContact="dmyrto.pravdyvets@alum.esci.upf.edu", myTitle="ExpressionSets exercises Omics course BDBI2019")
+show(myInfo)
+```
+
+
+```{r}
+## ----loadPackage---------------------------------------------------------
+require(Biobase)
+```
+
+
+```{r}
+## ----creaExpressionSet1--------------------------------------------------
+myEset <- ExpressionSet(expressionValues)
+class(myEset)
+show(myEset)
+```
+
+
+```{r}
+## ----AnnotatedDataFrame2-------------------------------------------------
+columnDesc <-  data.frame(labelDescription= c("Sample_Name", "Cell", "Experiment_Type", "TSA", "Replicate"))
+columnDesc
+myAnnotDF <- new("AnnotatedDataFrame", data=targets, varMetadata= columnDesc)
+show(myAnnotDF)
+```
+
+
+```{r}
+## ------------------------------------------------------------------------
+phenoData(myEset) <- myAnnotDF
+pData(myAnnotDF)
+
+## ----eval=FALSE----------------------------------------------------------
+## # (pData(myAnnotDF))<-pData(myAnnotDF)$sample_Name
+## # Error in validObject(.Object) :
+## #   invalid class ExpressionSet object: 1: sampleNames differ between assayData and phenoData
+## # invalid class ExpressionSet object: 2: sampleNames differ between phenoData and protocolData
+```
+
+
+```{r}
+## ------------------------------------------------------------------------
+rownames(pData(myAnnotDF))<-pData(myAnnotDF)$Sample_Name
+myEset <- ExpressionSet(assayData=expressionValues, phenoData=myAnnotDF)
+show(myEset)
+```
+
+
+```{r}
+## ------------------------------------------------------------------------
+myEset <- ExpressionSet(assayData=expressionValues, 
+                        phenoData=myAnnotDF, 
+                        featureNames = myGenes)
+# show(myEset)
+```
+
+
+```{r}
+## ----label=MIAME---------------------------------------------------------
+myDesc <- new("MIAME", name= myInfo[["myName"]],
+            lab= myInfo[["myLab"]],
+            contact= myInfo[["myContact"]] ,
+            title=myInfo[["myTitle"]])
+print(myDesc)
+```
+
+
+```{r}
+## ------------------------------------------------------------------------
+myEset <- ExpressionSet(assayData=expressionValues, 
+                        phenoData=myAnnotDF,
+                        fetureNames =myGenes,
+                        experimentData = myDesc)
+# show(myEset)
+```
+
+
+```{r}
+## ----usingExpressionSets-------------------------------------------------
+dim(exprs(myEset))
+class(phenoData(myEset))
+class(pData(phenoData(myEset)))
+head(pData(phenoData(myEset)))
+head(pData(myEset))
+```
+
+
+```{r}
+## ------------------------------------------------------------------------
+smallEset <- myEset[1:15,c(1:3,6:8)]
+dim(exprs(smallEset))
+dim(pData(smallEset))
+head(pData(smallEset))
+all(colnames(exprs(smallEset))==rownames(pData(smallEset)))
+pData(smallEset)
+```
+
+
+
+```{r}
+## ------------------------------------------------------------------------
+if (!require(GEOquery)) {
+  BiocManager::install("GEOquery")
+}
+require(GEOquery)
+gse <- getGEO("GSE106402")
+class(gse)
+names(gse)
+gse[[1]]
+esetFromGEO <- gse[[1]]
+esetFromGEO
+```
+
+
+
+
+
+
+
+
+
+```{r}
+t.test(expressions$GSM3143969)
+
+```
+
+```{r}
+
+```
