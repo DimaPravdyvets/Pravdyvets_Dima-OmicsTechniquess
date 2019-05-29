@@ -1,0 +1,109 @@
+---
+title: "Exercices in linear models and experimental design, Lima"
+author: "Dima"
+output:
+  html_document:
+    theme: united
+    toc: yes
+  pdf_document:
+    toc: no
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width = 12, fig.height = 8, cache = FALSE,
+                      echo = FALSE, warning = FALSE, message = FALSE)
+```
+# Introduction
+
+These exercises describe experimental situations that have been studied using some omics technology like microarrays.
+
+# Comparison between three types of breast cancer
+
+This case study is based on a paer published in  http://www.ncbi.nlm.nih.gov/pubmed/15897907 whose data are available in GEO as series GSE1561 series on the following link
+http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE1561
+
+The researchers investigated three types of breast
+cancer tumors: apocrine (APO), basal (BAS) and luminal (LUMI). The classification is based on the resistance of tumors to estrogen and androgen receptors.
+
+- Tumors classified as "APO" are negative for estrogen receptor (ER-) and positive for the androgen receptor (AR +).
+- Those classified as "LUMI" are ER + and AR + and
+- Those classified as "BAS" are ER- and AR.
+
+The assignment of each sample to an experimental group can be obtained from this link:
+http://www.ncbi.nlm.nih.gov/geo/gds/profileGraph.cgi?gds=1329
+
+Obviously this is an observational study but its analysis can be done using a linear model approach as well.
+
+1. Identify the experimental factors and their levels.
+2. Write down the design matrix associated with this study design.
+3. Build the contrast matrix needed to compare each tumor type with the oher two, that is:
+
+    1. "APO" vs “LUMI”
+    2. “APO" vs “BAS”
+    3. “LUMI" vas "BAS"
+    
+
+```{r readTargets}
+require (limma)
+targets<- read.csv("targets.csv",header = T,sep = ";")
+targets
+```
+
+```{r readData}
+dataMatrix <- read.csv("GSE114556_series_matrix.csv", header=TRUE,row.names = 1)
+colnames(dataMatrix)==targets$SampleName
+```
+
+```{r designMatrix}
+design2 <-model.matrix(~ 0+targets$grupos)
+colnames(design2)<-c("it","ct","ip","cp")
+rownames(design2)
+print(design2)
+```
+
+```{r contrastsMatrix}
+cont.matrix <- makeContrasts (
+  itvsct = it-ct,
+  itvsip = it-ip,
+  itvscp = it-cp,
+  ctvsip = ct-ip,
+  ctvscp = ct-cp,
+  ipvscp = ip-cp,
+  levels=design2)
+cont.matrix
+```
+
+```{r fitModel}
+require(limma)
+fit<-lmFit(dataMatrix, design2)
+fit.main<-contrasts.fit(fit, cont.matrix)
+fit.main<-eBayes(fit.main)
+```
+
+```{r extractResults}
+topTab_itvsct <- topTable (fit.main, number=nrow(fit.main), coef="itvsct", adjust="fdr"); head(topTab_itvsct)
+topTab_itvsip <- topTable (fit.main, number=nrow(fit.main), coef="itvsip", adjust="fdr"); head(topTab_itvsip)
+topTab_itvsct <- topTable (fit.main, number=nrow(fit.main), coef="itvscp", adjust="fdr"); head(topTab_itvsct)
+topTab_ctvsip <- topTable (fit.main, number=nrow(fit.main), coef="ctvsip", adjust="fdr"); head(topTab_ctvsip)
+topTab_ctvscp <- topTable (fit.main, number=nrow(fit.main), coef="ctvscp", adjust="fdr"); head(topTab_ctvscp)
+topTab_ipvscp <- topTable (fit.main, number=nrow(fit.main), coef="ipvscp", adjust="fdr"); head(topTab_ipvscp )
+```
+
+```{r showResults}
+volcanoplot(fit.main, coef="itvsct", highlight=10)
+volcanoplot(fit.main, coef="itvsip", highlight=10)
+volcanoplot(fit.main, coef="itvscp", highlight=10)
+volcanoplot(fit.main, coef="ctvsip", highlight=10)
+volcanoplot(fit.main, coef="ctvscp", highlight=10)
+volcanoplot(fit.main, coef="ipvscp", highlight=10)
+
+
+```
+`
+
+
+
+
+
+
+

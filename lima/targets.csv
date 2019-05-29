@@ -1,0 +1,13 @@
+SampleName;grupos;ShortNAme;Colors
+GSM3143969;Infection_total;IT69;firebrick3
+GSM3143970;Infection_total;IT70;firebrick3
+GSM3143971;Infection_total;IT71;firebrick3
+GSM3143972;Control_total;CT72;cyan3
+GSM3143973;Control_total;CT73;cyan3
+GSM3143974;Control_total;CT74;cyan3
+GSM3143975;Infection_polyA;IP75;darkgreen
+GSM3143976;Infection_polyA;IP76;darkgreen
+GSM3143977;Infection_polyA;IP77;darkgreen
+GSM3143978;Control_polyA;CP78;darkgoldenrod2
+GSM3143979;Control_polyA;CP79;darkgoldenrod2
+GSM3143980;Control_polyA;CP80;darkgoldenrod2

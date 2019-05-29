@@ -7,8 +7,8 @@
 ###FOLDER DESTINATION DEFINITIONS
 #---------------------------------------------------------------------------------------------
 workingDir <-getwd()
-dataDir <- file.path(workingDir, "dades")
-resultsDir <- file.path(workingDir, "results")
+dataDir <- file.path(workingDir, "dades1")
+resultsDir <- file.path(workingDir, "results1")
 setwd(resultsDir)
 
 
@@ -46,14 +46,13 @@ installifnot("scatterplot3d")
 #TARGETS
 targets <-read.csv(file=file.path(dataDir,"targets.csv"), header = TRUE, sep=";") 
 targets
-
 #CELFILES
 CELfiles <- list.celfiles(file.path(dataDir))
 CELfiles
 rawData <- read.celfiles(file.path(dataDir,CELfiles))
 
 #DEFINE SOME VARIABLES FOR PLOTS
-sampleNames <- as.character(targets$ShortName)
+sampleNames <- as.character(targets$ShortNAme)
 sampleColor <- as.character(targets$Colors)
 
 
