@@ -173,34 +173,46 @@ print(eset_filtered$eset)
 treat <- targets$grupos
 lev <- factor(treat, levels = unique(treat))
 design <-model.matrix(~0+lev)
-colnames(design) <- levels(lev)
+colnames(design)<-c("it","ct","ip","cp")
 rownames(design) <- sampleNames
 print(design)
 
 #COMPARISON
-cont.matrix1 <- makeContrasts( 
-        Induced.vs.WT = Induced-WT,
-        levels = design)
+cont.matrix1 <- makeContrasts (
+  itvsct = it-ct,
+  itvsip = it-ip,
+  itvscp = it-cp,
+  ctvsip = ct-ip,
+  ctvscp = ct-cp,
+  ipvscp = ip-cp,
+  levels=design2)
+cont.matrix1
 comparison1 <- "Effect of Induction"
 
 #MODEL FIT
 fit1 <- lmFit(eset_filtered$eset, design)
 fit.main1 <- contrasts.fit(fit1, cont.matrix1)
+fit.main1
 fit.main1 <- eBayes(fit.main1)
-
+fit.main1
 
 #---------------------------------------------------------------------------------------------
 ###DIFERENTIAL EXPRESSED GENES LISTS.TOPTABLES
 #---------------------------------------------------------------------------------------------
 
 #FILTER BY FALSE DISCOVERY RATE AND FOLD CHANGE
-topTab <-  topTable (fit.main1, number=nrow(fit.main1), coef="Induced.vs.WT", adjust="fdr",lfc=abs(3))
-
+topTab_itvsct <- topTable (fit.main, number=nrow(fit.main), coef="itvsct", adjust="fdr"); head(topTab_itvsct)
+#topTab_itvsip <- topTable (fit.main, number=nrow(fit.main), coef="itvsip", adjust="fdr"); head(topTab_itvsip)
+#topTab_itvsct <- topTable (fit.main, number=nrow(fit.main), coef="itvscp", adjust="fdr"); head(topTab_itvsct)
+#topTab_ctvsip <- topTable (fit.main, number=nrow(fit.main), coef="ctvsip", adjust="fdr"); head(topTab_ctvsip)
+#topTab_ctvscp <- topTable (fit.main, number=nrow(fit.main), coef="ctvscp", adjust="fdr"); head(topTab_ctvscp)
+#topTab_ipvscp <- topTable (fit.main, number=nrow(fit.main), coef="ipvscp", adjust="fdr"); head(topTab_ipvscp )
+topTab<-topTab_itvsct
 #EXPORTED TO CSV AND HTML FILE
-write.csv2(topTab, file= file.path(resultsDir,paste("Selected.Genes.in.comparison.",
+write.csv2((topTab_itvsct), file= file.path(resultsDir,paste("Selected.Genes.in.comparison.",
                                                     comparison1, ".csv", sep = "")))
 
-print(xtable(topTab,align="lllllll"),type="html",html.table.attributes="",
+print(xtable(topTab_itvsct,align="lllllll"),type="html",html.table.attributes="",
       file=paste("Selected.Genes.in.comparison.",comparison1,".html", sep=""))
 
 #---------------------------------------------------------------------------------------------
@@ -240,7 +252,7 @@ my_palette <- colorRampPalette(c("blue", "red"))(n = 299)
 heatmap.2(HMdata2,
           Rowv=TRUE,
           Colv=TRUE,
-          main="HeatMap Induced.vs.WT FC>=3",
+          main="HeatMap it.vs.ct FC>=3",
           scale="row",
           col=my_palette,
           sepcolor="white",
@@ -300,6 +312,27 @@ rownames(topTab.end) <- topTab.end[,1]
 topTab.end <- topTab.end[, -1]
 write.csv(topTab.end, file = file.path(resultsDir,"TopTable.end.csv"))
 
+
+
+
+
+
+
+
+
+
+#BiocManager::install("pd.hugene.2.0.st")
+#BiocManager::install("hugene20sttranscriptcluster.db")
+
+
+require(pd.hugene.2.0.st)
+require(hugene20sttranscriptcluster.db)
+
+columns(hugene20sttranscriptcluster.db)
+probes_itvsct<-rownames(head(topTab_itvsct))
+antot_itvsct<-select(hugene20sttranscriptcluster.db,probes_itvsct,
+                     columns = c("ENTREZID","SYMBOL","GENENAME"))
+anot_itvsct
 #---------------------------------------------------------------------------------------------
 #END OF SCRIPT
 #---------------------------------------------------------------------------------------------

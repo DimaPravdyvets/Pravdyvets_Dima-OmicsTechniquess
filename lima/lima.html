@@ -207,23 +207,20 @@ $(document).ready(function () {
 </div>
 <div id="comparison-between-three-types-of-breast-cancer" class="section level1">
 <h1>Comparison between three types of breast cancer</h1>
-<p>This case study is based on a paer published in <a href="http://www.ncbi.nlm.nih.gov/pubmed/15897907" class="uri">http://www.ncbi.nlm.nih.gov/pubmed/15897907</a> whose data are available in GEO as series GSE1561 series on the following link <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE1561" class="uri">http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE1561</a></p>
-<p>The researchers investigated three types of breast cancer tumors: apocrine (APO), basal (BAS) and luminal (LUMI). The classification is based on the resistance of tumors to estrogen and androgen receptors.</p>
-<ul>
-<li>Tumors classified as “APO” are negative for estrogen receptor (ER-) and positive for the androgen receptor (AR +).</li>
-<li>Those classified as “LUMI” are ER + and AR + and</li>
-<li>Those classified as “BAS” are ER- and AR.</li>
-</ul>
-<p>The assignment of each sample to an experimental group can be obtained from this link: <a href="http://www.ncbi.nlm.nih.gov/geo/gds/profileGraph.cgi?gds=1329" class="uri">http://www.ncbi.nlm.nih.gov/geo/gds/profileGraph.cgi?gds=1329</a></p>
+<p>The obligate intracellular bacterium Chlamydia trachomatis replicates in a cytosolic vacuole in human epithelial cells. Infection of human cells with C. trachomatis causes substantial changes to many host cell signalling pathways but the molecular basis of such influence is not well understood. Studies of gene transcription of the infected cell have shown altered transcription of many host cell genes, indicating a transcriptional response of the host cell to the infection. We here describe that infection of human cells with C. trachomatis as well as infection of murine cells with C. muridarum profoundly inhibits protein synthesis of the infected host cell. This inhibition was accompanied by changes to the ribosomal profile of the infected cell indicative of a block of translation initiation, most likely as part of a stress response. The chlamydial protease CPAF also reduced protein synthesis in uninfected cells although CPAF-deficient C. trachomatis showed no defect in this respect. Analysis of polysomal mRNA as a proxy of actively transcribed mRNA identified a number of biological processes differentially affected by chlamydial infection. Mapping of differentially regulated genes onto a protein interaction network identified nodes of up- and down-regulated networks during chlamydial infection. Proteomic analysis of protein synthesis further suggested translational regulation of host cell functions by chlamydial infection. These results demonstrate reprogramming of the host cell during chlamydial infection through the alteration of protein synthesis.</p>
 <p>Obviously this is an observational study but its analysis can be done using a linear model approach as well.</p>
 <ol style="list-style-type: decimal">
 <li>Identify the experimental factors and their levels.</li>
 <li>Write down the design matrix associated with this study design.</li>
 <li><p>Build the contrast matrix needed to compare each tumor type with the oher two, that is:</p>
 <ol style="list-style-type: decimal">
-<li>“APO” vs “LUMI”</li>
-<li>“APO” vs “BAS”</li>
-<li>“LUMI” vas “BAS”</li>
+<li>it vs ct<br />
+</li>
+<li>it vs ip</li>
+<li>it vs cp</li>
+<li>ct vs ip</li>
+<li>ct vs cp</li>
+<li>ip vs cp where i is for infection, c if for control, t is for total, p is for polyA</li>
 </ol></li>
 </ol>
 <pre><code>##    SampleName          grupos ShortNAme         Colors
