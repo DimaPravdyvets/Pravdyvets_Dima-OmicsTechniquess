@@ -1,6 +1,7 @@
 ---
 title: "Final Microarray data analysis done by Dmytro Pravdyvets"
-output: html_document
+output:
+  html_document: default
 ---
 # Project summary
 This is the final project of the second part of the course of Omics carried out by Alex Sanchez Pla, where the main goal is maily how to analyse Microarray data, learn how to obtain it and leaning how to use R and Rmd. The project consists of a report of an analysis of Microaray data of choice, which in my case is GSE114556. 
@@ -59,7 +60,6 @@ Loadign all the CEL files of the study that will be used for the analysis
 ```{r, include=F}
 CELfiles <- list.celfiles(file.path(dataDir))
 rawData <- read.celfiles(file.path(dataDir,CELfiles))
-
 ```
 Defining 2 varaibles of the targets file that will be used for plots later on
 ```{r}
@@ -312,10 +312,11 @@ require(pd.hugene.2.0.st)
 require(hugene20sttranscriptcluster.db)
 
 columns(hugene20sttranscriptcluster.db)
-probes_itvsct<-rownames(head(topTab_itvsct))
-antot_itvsct<-select(hugene20sttranscriptcluster.db,probes_itvsct,
-                     columns = c("ENTREZID","SYMBOL","GENENAME"))
-anot_itvsct
+probes_tot<-rownames(unique(topTab))
+head(probes_itvsct)
+write.csv(select(hugene20sttranscriptcluster.db,probes_tot,
+                     columns = c("SYMBOL","ENSEMBL","ENTREZID","PROBEID","UNIGENE","UNIPROT","REFSEQ","GENENAME")),"anotations.csv")
+
 ```
 #---------------------------------------------------------------------------------------------
 #END OF SCRIPT
