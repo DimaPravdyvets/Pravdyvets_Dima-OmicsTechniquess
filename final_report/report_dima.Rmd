@@ -1,7 +1,7 @@
 ---
 title: "Final Microarray data analysis done by Dmytro Pravdyvets"
 output:
-  html_document: default
+html_document: default
 ---
 # Project summary
 This is the final project of the second part of the course of Omics carried out by Alex Sanchez Pla, where the main goal is maily how to analyse Microarray data, learn how to obtain it and leaning how to use R and Rmd. The project consists of a report of an analysis of Microaray data of choice, which in my case is GSE114556. 
@@ -20,7 +20,7 @@ Ohmer M, Tzivelekidis T, Niedenführ N, Volceanov-Hahn L et al. Infection of HeL
 knitr::opts_chunk$set(echo = TRUE)
 ```
 Loading all the needed packages before running the analysis
-```{r, include=FALSE}
+```{r packages include=FALSE}
 if (!require(BiocManager)) install.packages("BiocManager")
 
 installifnot <- function (pkg){
@@ -46,36 +46,36 @@ installifnot("scatterplot3d")
 ```
 #### targets summary
 We can see that the whole grou of observation can be divided into 12 samples, that can be grouped into 4 different subgroups, the division into subgroups will be later used as factors for regression model
-```{r}
+```{r Read targets}
 targets <- read.csv('./data/targets.csv', header = T,sep = ';')
 targets
 ```
-```{r,include=FALSE}
+```{r include=FALSE}
 workingDir <-getwd()
 dataDir <- file.path(workingDir, "data")
 resultsDir <- file.path(workingDir, "results")
 setwd(resultsDir)
 ```
 Loadign all the CEL files of the study that will be used for the analysis
-```{r, include=F}
+```{r Read cel, include=F}
 CELfiles <- list.celfiles(file.path(dataDir))
 rawData <- read.celfiles(file.path(dataDir,CELfiles))
 ```
 Defining 2 varaibles of the targets file that will be used for plots later on
-```{r}
+```{r Predifine variables for plots}
 sampleNames <- as.character(targets$ShortNAme)
 sampleColor <- as.character(targets$Colors)
 ```
 ### Quality control of arrays with raw data
 We begin to analyse data with a boxplot 
-```{r}
+```{r Boxplot raw}
 boxplot(rawData, which="all",las=2, main="Intensity distribution of RAW data", 
         cex.axis=0.6, col=sampleColor, names=sampleNames)
 ```
 We can see that there not seem to be any artifacts with the data, but the distribution of the values seems to be somewhat different between the groups.
 
 Next step would be to cluster the data
-```{r}
+```{r Cluster Raw}
 clust.euclid.average <- hclust(dist(t(exprs(rawData))),method="average")
 plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of RawData", 
      cex=0.7,  hang=-1)
@@ -83,7 +83,7 @@ plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of 
 It looks like there are some clear clusters of data if we compare the clusters to the boxplots, similar boxplot end up in the same cluster ex(69,72,73).
 
 Now we do the principar component analysis
-```{r}
+```{r PCA raw}
 plotPCA <- function ( X, labels=NULL, colors=NULL, dataDesc="", scale=FALSE, formapunts=NULL, myCex=0.8,...)
 {
   pcX<-prcomp(t(X), scale=scale) # o prcomp(t(X))
@@ -107,14 +107,14 @@ has more effect on a specific sample.
 ###Data normalization and analysis
 Now we normalize our data and check if the results are now different or same and if the normalization is okay without artifacts. 
 
-```{r, include=F}
+```{r Normalize, include=F}
 eset<-rma(rawData)
 
 write.exprs(eset, file.path(resultsDir, "NormData.txt"))
 
 ```
 Once data is normalized, we repeat the analysis done before and compare the results
-```{r}
+```{r Boxplot normalized}
 #BOXPLOT
 boxplot(eset, las=2, main="Intensity distribution of Normalized data", cex.axis=0.6, 
         col=sampleColor, names=sampleNames)
@@ -123,7 +123,7 @@ boxplot(eset, las=2, main="Intensity distribution of Normalized data", cex.axis=
 Now we can see that the data has barely any difference, being someone with little experience in this field, I do not have a concrete answer, but after looking up things on internet and just intuevly, the fact that the data is so stabilized now is strange.
 
 Next step is to cluster the observations
-```{r}
+```{r Cluster normalized}
 clust.euclid.average <- hclust(dist(t(exprs(eset))),method="average")
 plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of NormData", 
      cex=0.7,  hang=-1)
@@ -131,7 +131,7 @@ plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of 
 We can compare the obtained tree with the non-normalized data, and we can see few changes in the nodes, for example node 74 and 80 are not together now, 75 and 76 are not longer in the same cluster neither, but besides that other nodes are stil the same
 
 Last step is to again analyze principal components
-```{r}
+```{r PCA normalized}
 plotPCA <- function ( X, labels=NULL, colors=NULL, dataDesc="", scale=FALSE, formapunts=NULL, myCex=0.8,...)
 {
   pcX<-prcomp(t(X), scale=scale) # o prcomp(t(X))
@@ -153,7 +153,7 @@ Here is where we can see more difference, some previous points differ a lot and 
 
 ###Array quality matrices
 Now we are going to filter our data and check it's quality
-```{r}
+```{r Filtering}
 arrayQualityMetrics(rawData,  reporttitle="QualityControl", force=TRUE)
 annotation(eset) <- "org.Mm.eg.db"
 eset_filtered <- nsFilter(eset, var.func=IQR,
@@ -161,17 +161,17 @@ eset_filtered <- nsFilter(eset, var.func=IQR,
          filterByQuantile=TRUE)
 ```
 After the filtering,the amount of genes that are out is:
-```{r}
+```{r Filter out}
 print(eset_filtered$filter.log$numLowVar)
 ```
 And the rest of the genes with the characteristic of the dataset can be obtained from here:
-```{r}
+```{r Filter characteristics}
 print(eset_filtered$eset)
 ```
 
 ####Differential expressed genes, regression and plots
 Now the analysis itself is going to be done, using differentially expressed genes, regression models and plots
-```{r}
+```{r Start analysis}
 treat <- targets$grupos
 lev <- factor(treat, levels = unique(treat))
 design <-model.matrix(~0+lev)
@@ -181,8 +181,8 @@ print(design)
 ```
 Here you can see the design model of the data, which has 4 different Alphas where each alpha has 3 samples
 
-Time to do comparisons!
-```{r}
+Creating contrast matrix
+```{r Contrast}
 cont.matrix1 <- makeContrasts (
   itvsct = it-ct,
   itvsip = it-ip,
@@ -191,27 +191,27 @@ cont.matrix1 <- makeContrasts (
   ctvscp = ct-cp,
   ipvscp = ip-cp,
   levels=design)
-comparison1 <- "Effect of Induction"
+comparison1 <- "Infection or control vs polyA or Total"
 cont.matrix1
 ```
 
 Now we have both matrices, next step is to fit the data to a model
 
-```{r}
+```{r Fit model}
 fit1 <- lmFit(eset_filtered$eset, design)
 fit.main1 <- contrasts.fit(fit1, cont.matrix1)
 fit.main1
 ```
 
 Another good idea is to account for bayeses in the model, for this we can run this code:
-```{r}
+```{r adjust bayes}
 fit.main1 <- eBayes(fit.main1)
 fit.main1
 ```
 
 ####Toptables of the genes
 We already have the matrices, model and data, so we can get the toptables for each comparison, join the into 1 and do a volcano plot of this abomination
-```{r}
+```{r topTables}
 topTab_itvsct <- topTable (fit.main1, number=nrow(fit.main1), coef="itvsct", adjust="fdr"); 
 head(topTab_itvsct)
 topTab_itvsip <- topTable (fit.main1, number=nrow(fit.main1), coef="itvsip", adjust="fdr"); head(topTab_itvsip)
@@ -220,16 +220,12 @@ topTab_ctvsip <- topTable (fit.main1, number=nrow(fit.main1), coef="ctvsip", adj
 topTab_ctvscp <- topTable (fit.main1, number=nrow(fit.main1), coef="ctvscp", adjust="fdr"); head(topTab_ctvscp)
 topTab_ipvscp <- topTable (fit.main1, number=nrow(fit.main1), coef="ipvscp", adjust="fdr"); head(topTab_ipvscp )
 
-merge(topTab_itvscp[1:1,],topTab_itvsct[1:1,])
-
-k<-list(topTab_itvscp[1:round(NROW(topTab_itvscp)*0.05),],topTab_itvsct[1:round(NROW(topTab_itvsct)*0.05),],topTab_itvsip[1:round(NROW(topTab_itvsip)*0.05),],topTab_ctvscp[1:round(NROW(topTab_ctvscp)*0.05),],topTab_ctvsip[1:round(NROW(topTab_ctvsip)*0.05),],topTab_ipvscp[1:round(NROW(topTab_ipvscp)*0.05),])
-
-#topTab<-Reduce(merge,list(topTab_itvscp[1:round(NROW(topTab_itvscp)*0.05),],topTab_itvsct[1:round(NROW(topTab_itvsct)*0.05),],topTab_itvsip[1:round(NROW(topTab_itvsip)*0.05),],topTab_ctvscp[1:round(NROW(topTab_ctvscp)*0.05),],topTab_ctvsip[1:round(NROW(topTab_ctvsip)*0.05),],topTab_ipvscp[1:round(NROW(topTab_ipvscp)*0.05),]))
 topTab<-do.call('rbind',list(topTab_itvscp[1:round(NROW(topTab_itvscp)*0.05),],topTab_itvsct[1:round(NROW(topTab_itvsct)*0.05),],topTab_itvsip[1:round(NROW(topTab_itvsip)*0.05),],topTab_ctvscp[1:round(NROW(topTab_ctvscp)*0.05),],topTab_ctvsip[1:round(NROW(topTab_ctvsip)*0.05),],topTab_ipvscp[1:round(NROW(topTab_ipvscp)*0.05),]))
-topTab
+head(topTab)
+
 ```
 
-```{r}
+```{r Volcano}
 volcanoplot(fit.main1, highlight=10, names=fit.main1$ID, 
             main = paste("Differentially expressed genes", colnames(cont.matrix1), sep="\n"))
 abline(v = c(-3, 3))
@@ -247,7 +243,7 @@ dev.off()
 #---------------------------------------------------------------------------------------------
 
 #PREPARE THE DATA
-```{r}
+```{r Heatmap}
 
 my_frame <- data.frame(exprs(eset))
 head(my_frame)
@@ -265,7 +261,7 @@ ncol(my_frame)
 heatmap.2(HMdata2,
           Rowv=TRUE,
           Colv=TRUE,
-          main="HeatMap it.vs.ct FC>=3",
+          main="HeatMap rawdata",
           scale="row",
           col=my_palette,
           sepcolor="white",
@@ -279,25 +275,7 @@ heatmap.2(HMdata2,
           tracecol=NULL,
           srtCol=30)
 
-#EXPORT TO PDF FILE
-pdf(file.path(resultsDir,"HeatMap InducedvsWT.pdf"))
-heatmap.2(HMdata2,
-          Rowv=TRUE,
-          Colv=TRUE,
-          main="HeatMap Induced.vs.WT FC>=3",
-          scale="row",
-          col=my_palette,
-          sepcolor="white",
-          sepwidth=c(0.05,0.05),
-          cexRow=0.5,
-          cexCol=0.9,
-          key=TRUE,
-          keysize=1.5,
-          density.info="histogram",
-          ColSideColors=c(rep("red",4),rep("blue",4)),
-          tracecol=NULL,
-          srtCol=30)
-dev.off()
+
 ```
 #---------------------------------------------------------------------------------------------
 ###DATA ANNOTATION
@@ -307,17 +285,17 @@ dev.off()
 #BiocManager::install("pd.hugene.2.0.st")
 #BiocManager::install("hugene20sttranscriptcluster.db")
 
-```{r}
+```{r annotations}
 require(pd.hugene.2.0.st)
 require(hugene20sttranscriptcluster.db)
 
 columns(hugene20sttranscriptcluster.db)
 probes_tot<-rownames(unique(topTab))
-head(probes_itvsct)
 write.csv(select(hugene20sttranscriptcluster.db,probes_tot,
                      columns = c("SYMBOL","ENSEMBL","ENTREZID","PROBEID","UNIGENE","UNIPROT","REFSEQ","GENENAME")),"anotations.csv")
 
 ```
+
 #---------------------------------------------------------------------------------------------
 #END OF SCRIPT
 #---------------------------------------------------------------------------------------------
