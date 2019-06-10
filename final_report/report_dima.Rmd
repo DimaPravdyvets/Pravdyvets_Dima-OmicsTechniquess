@@ -14,13 +14,11 @@ HeLa cells were infected with C. trachomatis L2 for 33h or left untreated and po
 
 ## Citations
 Ohmer M, Tzivelekidis T, Niedenführ N, Volceanov-Hahn L et al. Infection of HeLa cells with Chlamydia trachomatis inhibits protein synthesis and causes multiple changes to host cell pathways. Cell Microbiol 2019 Apr;21(4):e12993. PMID: 30551267
-
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 Loading all the needed packages before running the analysis
-```{r packages include=FALSE}
+```{r packages, include=FALSE}
 if (!require(BiocManager)) install.packages("BiocManager")
 
 installifnot <- function (pkg){
@@ -44,7 +42,7 @@ installifnot("xtable")
 installifnot("gplots")
 installifnot("scatterplot3d")
 ```
-#### targets summary
+### Targets summary
 We can see that the whole grou of observation can be divided into 12 samples, that can be grouped into 4 different subgroups, the division into subgroups will be later used as factors for regression model
 ```{r Read targets}
 targets <- read.csv('./data/targets.csv', header = T,sep = ';')
@@ -152,7 +150,7 @@ Here is where we can see more difference, some previous points differ a lot and 
 
 ###Array quality matrices
 Now we are going to filter our data and check it's quality
-```{r Filtering}
+```{r Filtering, include=F}
 arrayQualityMetrics(rawData,  reporttitle="QualityControl", force=TRUE)
 annotation(eset) <- "org.Mm.eg.db"
 eset_filtered <- nsFilter(eset, var.func=IQR,
@@ -168,7 +166,7 @@ And the rest of the genes with the characteristic of the dataset can be obtained
 print(eset_filtered$eset)
 ```
 
-####Differential expressed genes, regression and plots
+###Differential expressed genes, regression and plots
 Now the analysis itself is going to be done, using differentially expressed genes, regression models and plots
 ```{r Start analysis}
 treat <- targets$grupos
@@ -208,8 +206,8 @@ fit.main1 <- eBayes(fit.main1)
 fit.main1
 ```
 
-####Toptables of the genes
-We already have the matrices, model and data, so we can get the toptables for each comparison, join the into 1 and do a volcano plot of this abomination
+###Toptables of the genes
+We already have the matrices, model and data, so we can get the toptables for each comparison
 ```{r topTables}
 topTab_itvsct <- topTable (fit.main1, number=nrow(fit.main1), coef="itvsct", adjust="fdr"); 
 head(topTab_itvsct)
@@ -218,12 +216,15 @@ topTab_itvscp <- topTable (fit.main1, number=nrow(fit.main1), coef="itvscp", adj
 topTab_ctvsip <- topTable (fit.main1, number=nrow(fit.main1), coef="ctvsip", adjust="fdr"); head(topTab_ctvsip)
 topTab_ctvscp <- topTable (fit.main1, number=nrow(fit.main1), coef="ctvscp", adjust="fdr"); head(topTab_ctvscp)
 topTab_ipvscp <- topTable (fit.main1, number=nrow(fit.main1), coef="ipvscp", adjust="fdr"); head(topTab_ipvscp )
-
+```
+Here we join the most differential genes of all the topTables into 1, which will be used for plots and annotation
+```{r Big_top_table}
 topTab<-do.call('rbind',list(topTab_itvscp[1:round(NROW(topTab_itvscp)*0.05),],topTab_itvsct[1:round(NROW(topTab_itvsct)*0.05),],topTab_itvsip[1:round(NROW(topTab_itvsip)*0.05),],topTab_ctvscp[1:round(NROW(topTab_ctvscp)*0.05),],topTab_ctvsip[1:round(NROW(topTab_ctvsip)*0.05),],topTab_ipvscp[1:round(NROW(topTab_ipvscp)*0.05),]))
-head(topTab)
-
 ```
 
+
+###Volcano plot
+Creating volcano plot of top differentially expressed genes
 ```{r Volcano}
 volcanoplot(fit.main1, highlight=10, names=fit.main1$ID, 
             main = paste("Differentially expressed genes", colnames(cont.matrix1), sep="\n"))
@@ -233,52 +234,26 @@ abline(v = c(-3, 3))
 
 
 ```
-#---------------------------------------------------------------------------------------------
-###HEATMAP PLOTS
-#---------------------------------------------------------------------------------------------
 
-#PREPARE THE DATA
+
+### Prepare data for heatmap and make the plot
+Creating heatmap of the data
 ```{r Heatmap}
 
 my_frame <- data.frame(exprs(eset))
-head(my_frame)
 HMdata <- merge(my_frame, topTab, by.x = 0, by.y = 0)
 rownames(HMdata) <- HMdata$Row.names
 HMdata <- HMdata[, -c(1,10:15)]
-head(HMdata)
 HMdata2 <- data.matrix(HMdata, rownames.force=TRUE)
-head(HMdata2)
 
-#HEATMAP PLOT
-my_palette <- colorRampPalette(c("blue", "red"))(n = 299)
-ncol(my_frame)
-heatmap.2(HMdata2,
-          Rowv=TRUE,
-          Colv=TRUE,
-          main="HeatMap rawdata",
-          scale="row",
-          col=my_palette,
-          sepcolor="white",
-          sepwidth=c(0.05,0.05),
-          cexRow=0.5,
-          cexCol=0.9,
-          key=TRUE,
-          keysize=1.5,
-          density.info="histogram",
-          ColSideColors=sampleColor,
-          tracecol=NULL,
-          srtCol=30)
+
 
 ```
-#---------------------------------------------------------------------------------------------
-###DATA ANNOTATION
-#---------------------------------------------------------------------------------------------
+![Heatmap](/home/dima/Desktop/Bomics/Pravdyvets_Dima-OmicsTechniquess/final_report/results/HeatMap.png)
 
-
-#BiocManager::install("pd.hugene.2.0.st")
-#BiocManager::install("hugene20sttranscriptcluster.db")
-
-```{r annotations}
+###Annotating the obtained genes
+The annotated genes are going to be written in annotation.csv. To get rid of the duplicates, use file "unique", by "bash unique". 
+```{r annotations, include=F}
 require(pd.hugene.2.0.st)
 require(hugene20sttranscriptcluster.db)
 
@@ -287,63 +262,4 @@ probes_tot<-rownames(unique(topTab))
 
 ```
 
-```{r create_files}
 
-#plots raw data
-pdf(file.path(resultsDir, "QCPlots_Raw.pdf"))
-boxplot(rawData, which="all",las=2, main="Intensity distribution of RAW data", 
-        cex.axis=0.6, col=sampleColor, names=sampleNames)
-plot(clust.euclid.averageR, labels=sampleNames, main="Hierarchical clustering of samples of RawData", 
-     cex=0.7,  hang=-1)
-plotPCA(exprs(rawData), labels=sampleNames, dataDesc="raw data", colors=sampleColor,
-        formapunts=c(rep(16,4),rep(17,4)), myCex=0.6)
-dev.off()
-
-#plots normalized data
-pdf(file.path(resultsDir, "QCPlots_Norm.pdf"))
-boxplot(eset, which="all",las=2, main="Intensity distribution of Normalized data", 
-        cex.axis=0.6, col=sampleColor, names=sampleNames)
-plot(clust.euclid.averageN, labels=sampleNames, main="Hierarchical clustering of samples of Normalized", 
-     cex=0.7,  hang=-1)
-plotPCA(exprs(eset), labels=sampleNames, dataDesc="Normalized data", colors=sampleColor,
-        formapunts=c(rep(16,4),rep(17,4)), myCex=0.6)
-dev.off()
-#annotations
-write.csv(select(hugene20sttranscriptcluster.db,probes_tot,
-                     columns = c("SYMBOL","ENSEMBL","ENTREZID","PROBEID","UNIGENE","UNIPROT","REFSEQ","GENENAME")),"anotations.csv")
-#normalized data
-write.exprs(eset, file.path(resultsDir, "NormData.txt"))
-
-#volcano
-pdf(file.path(resultsDir,"Volcanos.pdf"))
-volcanoplot(fit.main1, highlight = 10, names = fit.main1$ID, 
-            main = paste("Differentially expressed genes", colnames(cont.matrix1), sep = "\n"))
-abline(v = c(-3, 3))
-dev.off()
-
-#data heatmap
-write.csv2(HMdata2, file = file.path(resultsDir,"Data2HM.csv"))
-
-#EXPORT TO PDF FILE
-pdf(file.path(resultsDir,"HeatMap.pdf"))
-heatmap.2(HMdata2,
-          Rowv=TRUE,
-          Colv=TRUE,
-          main="HeatMap rawdata",
-          scale="row",
-          col=my_palette,
-          sepcolor="white",
-          sepwidth=c(0.05,0.05),
-          cexRow=0.5,
-          cexCol=0.9,
-          key=TRUE,
-          keysize=1.5,
-          density.info="histogram",
-          ColSideColors=c(rep("red",4),rep("blue",4)),
-          tracecol=NULL,
-          srtCol=30)
-dev.off()
-```
-#---------------------------------------------------------------------------------------------
-#END OF SCRIPT
-#---------------------------------------------------------------------------------------------

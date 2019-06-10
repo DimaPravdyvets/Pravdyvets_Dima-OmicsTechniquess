@@ -259,7 +259,7 @@ heatmap.2(HMdata2,
           key=TRUE,
           keysize=1.5,
           density.info="histogram",
-          ColSideColors=c(rep("red",4),rep("blue",4)),
+          ColSideColors=sampleColor,
           tracecol=NULL,
           srtCol=30)
 dev.off()
@@ -273,5 +273,4 @@ columns(hugene20sttranscriptcluster.db)
 probes_tot<-rownames(unique(topTab))
 write.csv(select(hugene20sttranscriptcluster.db,probes_tot,
                      columns = c("SYMBOL","ENSEMBL","ENTREZID","PROBEID","UNIGENE","UNIPROT","REFSEQ","GENENAME")),"anotations.csv")
-
 
