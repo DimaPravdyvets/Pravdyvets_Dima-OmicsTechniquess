@@ -54,8 +54,8 @@ boxplot(rawData, which="all",las=2, main="Intensity distribution of RAW data",
 
 
 ## ------------------------------------------------------------------------
-clust.euclid.average <- hclust(dist(t(exprs(rawData))),method="average")
-plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of RawData", 
+clust.euclid.averageR <- hclust(dist(t(exprs(rawData))),method="average")
+plot(clust.euclid.averageR, labels=sampleNames, main="Hierarchical clustering of RawData", 
      cex=0.7,  hang=-1)
 
 
@@ -79,7 +79,7 @@ plotPCA(exprs(rawData), labels=sampleNames, dataDesc="raw data", colors=sampleCo
 pdf(file.path(resultsDir, "QCPlots_Raw.pdf"))
 boxplot(rawData, which="all",las=2, main="Intensity distribution of RAW data", 
         cex.axis=0.6, col=sampleColor, names=sampleNames)
-plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of samples of RawData", 
+plot(clust.euclid.averageR, labels=sampleNames, main="Hierarchical clustering of samples of RawData", 
      cex=0.7,  hang=-1)
 plotPCA(exprs(rawData), labels=sampleNames, dataDesc="raw data", colors=sampleColor,
         formapunts=c(rep(16,4),rep(17,4)), myCex=0.6)
@@ -101,8 +101,8 @@ boxplot(eset, las=2, main="Intensity distribution of Normalized data", cex.axis=
 
 
 ## ------------------------------------------------------------------------
-clust.euclid.average <- hclust(dist(t(exprs(eset))),method="average")
-plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of NormData", 
+clust.euclid.averageN <- hclust(dist(t(exprs(eset))),method="average")
+plot(clust.euclid.averageN, labels=sampleNames, main="Hierarchical clustering of NormData", 
      cex=0.7,  hang=-1)
 
 
@@ -123,7 +123,15 @@ plotPCA <- function ( X, labels=NULL, colors=NULL, dataDesc="", scale=FALSE, for
 plotPCA(exprs(eset), labels=sampleNames, dataDesc="NormData", colors=sampleColor,
         formapunts=c(rep(16,4),rep(17,4)), myCex=0.6)
 
-
+#plots normalized data
+pdf(file.path(resultsDir, "QCPlots_Norm.pdf"))
+boxplot(eset, which="all",las=2, main="Intensity distribution of Normalized data", 
+        cex.axis=0.6, col=sampleColor, names=sampleNames)
+plot(clust.euclid.averageN, labels=sampleNames, main="Hierarchical clustering of samples of Normalized", 
+     cex=0.7,  hang=-1)
+plotPCA(exprs(eset), labels=sampleNames, dataDesc="Normalized data", colors=sampleColor,
+        formapunts=c(rep(16,4),rep(17,4)), myCex=0.6)
+dev.off()
 
 ## ------------------------------------------------------------------------
 arrayQualityMetrics(rawData,  reporttitle="QualityControl", force=TRUE)
