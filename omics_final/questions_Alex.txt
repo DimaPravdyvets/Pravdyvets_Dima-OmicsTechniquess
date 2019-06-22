@@ -1,0 +1,29 @@
+1. How to measure expression of a gene with microarrays?
+
+We can lable DNA with fluorescent dye, better to do it with 2 samples, one in normal condition and anothe one in tumor cell for example. Next step is to place this samples on a probe and scan it with 2 different lasers for each sample color. Overlay the obsertations from the two scans and see which color is dominant, this is going to tell us if a gene is expressed or not and in which sample it is more or less expressed.
+ 
+2. Why do we need to normalize omics data and what does this concept mean?
+
+High-throughput omics data often contain systematic biases introduced during various steps of sample processing and data generation. As the source of these biases is usually unknown, it is difficult to select an optimal normalization method for a given data set. To be able to evaluate data in a correct way is to transform a variable into a specific range so the artifacts are eliminated. This data can than be used in robust models of regression like linear or others to find relationships.   
+
+3. What is the use of ExpressionSets?
+
+ExpressionSet is a set  of different type of information about genomic data which includes: 
+-of expression data from microarray experiments (assayData)
+-‘meta-data’ describing samples in the experiment (phenoData)
+- , annotations and meta-data about the features on the chip or technology used for the experiment (featureData, annotation)
+-  information related to the protocol used for processing each sample (protocolData)
+-  flexible structure to describe the experiment (experimentData)
+As we can see this is a complete set of different informatio about am experiment, it's design, tecniques and all of this information inside of 1 variable which reduces amoun of variables used for analysis.
+
+4. Examples of creating design and contrast matrix of a study
+Design - 1 matrix, column - different varaibles, row - sample, with one variable where if a sample has this variable you write 1, if not, 0.
+Contrast - 1 smaller matrx, column - comparisons X vs Y, row - variables, if a variable is placed in X (X vs Y) in the comoarison it recieves a 1, if it is not in the comparison a 0 and if it is at y (X vs Y) a -1.
+
+5. Explain volcano plot
+
+A volcano plot typically plots some measure of effect on the x-axis (typically the fold change) and the statistical significance on the y-axis (typically the -log10 of the p-value). Genes that are highly dysregulated are farther to the left and right sides, while highly significant changes appear higher on the plot.
+
+6. R
+
+R
