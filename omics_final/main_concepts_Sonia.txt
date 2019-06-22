@@ -1,0 +1,130 @@
+####################################
+####### POWER POINT 1
+####################################
+
+Sanger sequencing: 
+There are three main steps to Sanger sequencing.
+
+1. The first step is generating n DNA fragments of varying lengths, each terminated with a labeled nucleotide, where n is the number of nucleotide bases in the target DNA sequence. This is done by combining DNA primer, nucleotides (dATP, dCTP, dGTP, dTTP), DNA polymerase, the DNA sequence of interest, and labeled dideoxynucleotides (ddATP, ddCTP, ddGTP, ddTTP). No nucleotide can be added to the DNA chain once a dideoxynucleotides has been incorporated, so each fragment will end with a labeled nucleotide. A much smaller amount of dideoxynucleotides is used than the amount of regular nucleotides.
+
+2. The second step is to separate the n DNA sequences be length using capillary gel electrophoresis. The shorter fragments move faster than the longer fragments. The result is that the DNA pieces are fed into the third step from shortest to longest sequence.
+
+3. In the third step a laser excites the label on the nucleotide at the end of each sequence. Each base is tagged with a different label, so the light emitted by each excited nucleotide can be tied to the correct base. The laser generates a chromatogram showing the fluorescent peak of each nucleotide. The chromatogram has the nucleotides in the correct order because of the electrophoresis.
+\
+NGS methods
+
+Common characteristics of the methods:
+1. Cell-free preparation of sequencing library
+2. Solid-phase amplification
+3. Massively paraller sequencing reaction of each DNA fragment independently
+4. Direct sequencing without need of electrophoresis
+
+454/Roche-Pyrosequencing
+1.The process begins with a sample of double-stranded DNA.
+
+2.The DNA is broken up into fragments of around 400 to 600 base pairs? using restriction enzymes ?that ‘cut’ the DNA at specific points.
+
+3.Short sequences of DNA called adaptors?, are attached to the DNA fragments.
+
+4.Tiny resin beads are added to the mix.
+
+5.DNA sequences on the beads are complementary? to sequences on the adaptors, allowing the DNA fragments to bind directly to the beads, ideally one fragment to each bead.
+
+6.When the DNA fragments attach to the DNA on the beads the bonds joining the double-strand together, break and the strands separate, becoming single-stranded DNA.
+
+7.The fragments of DNA are then copied numerous times on each bead by a reaction known as the polymerase chain reaction (PCR)?. This creates millions of identical copies of the DNA sequence.
+
+8.The beads are then filtered to remove any that have either failed to attach to any DNA or contain more than one type of DNA fragment.
+
+9.Then, the remaining beads are put into wells on a sequencing plate (one bead per well) along with enzyme beads that contain the DNA polymerase? and primer? needed for the sequencing reaction
+
+10.The polymerase enzyme and primer attach to the DNA fragments on the beads.
+
+11.Nucleotide bases? are added to the wells in waves of one type of base at a time: a wave of As, followed by a wave of Cs, followed by Gs, followed by Ts.
+
+12.When each base is incorporated into the DNA, light is given out and this is recorded by a camera.
+
+13.The intensity of the light corresponds to the number of nucleotides of the same type that have been incorporated. For example, if there are three consecutive As in the fragment, the amount of light generated would be three times that of a single A in the fragment.
+
+14.By plotting this pattern of light intensity on a graph, the sequence of the original piece of DNA can be decoded.
+----------------------------------------------------------------------------------------------------
+Illumina - reversible terminations
+
+1.The first step in this sequencing technique is to break up the DNA ?into more manageable fragments of around 200 to 600 base pairs?.
+
+2.Short sequences of DNA called adaptors?, are attached to the DNA fragments.
+
+3.The DNA fragments attached to adaptors are then made single stranded. This is done by incubating the fragments with sodium hydroxide.
+
+4.Once prepared, the DNA fragments are washed across the flowcell. The complementary DNA binds to primers? on the surface of the flowcell and DNA that doesn’t attach is washed away.
+
+5.The DNA attached to the flowcell is then replicated to form small clusters of DNA with the same sequence. When sequenced, each cluster of DNA molecules will emit a signal that is strong enough to be detected by a camera.
+
+6.Unlabelled nucleotide bases? and DNA polymerase? are then added to lengthen and join the strands of DNA attached to the flowcell. This creates ‘bridges’ of double-stranded DNA between the primers on the flowcell surface.
+
+7.The double-stranded DNA is then broken down into single-stranded DNA using heat, leaving several million dense clusters of identical DNA sequences.
+
+8.Primers and fluorescently?-labelled terminators (terminators are a version of nucleotide base – A, C, G or T - that stop DNA synthesis) are added to the flowcell.
+
+9.The primer attaches to the DNA being sequenced.
+
+10.The DNA polymerase then binds to the primer and adds the first fluorescently-labelled terminator to the new DNA strand. Once a base has been added no more bases can be added to the strand of DNA until the terminator base is cut from the DNA.
+
+11.Lasers are passed over the flowcell to activate the fluorescent label on the nucleotide base. This fluorescence is detected by a camera and recorded on a computer. Each of the terminator bases (A, C, G and T) give off a different colour.
+
+12.The fluorescently-labelled terminator group is then removed from the first base and the next fluorescently-labelled terminator base can be added alongside. And so the process continues until millions of clusters have been sequenced.
+
+13.The DNA sequence is analysed base-by-base during Illumina sequencing, making it a highly accurate method. The sequence generated can then be aligned to a reference sequence, this looks for matches or changes in the sequenced DNA. 
+-----------------------------------------------------------------------------------------------------
+Real time sequencing
+
+Ion torrent:
+1. Eulsion PCR with water-in-oil microdroplets
+2. Real-time sequencing by using semiconductor plate to count proton release during DNA synthesis
+3.Noral nucleotides flow sequentially through the chip while the incorploration of complementary ones is detected by semi-conductor plate by ph-change
+
+Pacific Biosciences: NSK mierda de immobilized DNA polymerase me flipa como huevas consiguen hacer estas cosas la vdd
+
+Nanopore:
+1. Size of a usb
+2. Single molecule sequencing 
+3. Electrical based detection, each nucleotide corresponds to a different current and this can be plotted
+-----------------------------------------------------------------------------------------------------
+Challanges in ngs:
+-Increase read length
+-Improve accuracy
+-Single mollecule sequencing without amplification
+-De-novo assembly of complex genomes
+-Sequencing of complex genomes
+
+####################################
+####### POWER POINT 2
+####################################
+
+DNA-seq applications:
+
+1.De-novo genome sequencing
+Assembly of genomes after reads are obtained, done with contigs->scaffolds may lead to errors while recreating a genome
+
+2.Complete genome sequencing
+Next step after de-novo reassembly where sequenced genomes are rectreated using another already recreated genome as a reference
+
+3.Reduced representation sequencing
+DNA microarrays, Affymetrix oligonucleotide arrays, sequencing used to obtain some representation of a genome, but not as specific as target genome sequencing
+
+
+4.Target genome resequencing
+Basically a study of smaller parts of DNA to search for specific things like tumor genes, variant discovery, only exons, etc. 
+
+5.Paired-end sequencing
+Contruct a genomic library of a specific size -> sequence this fragments from the ends (paired-end) -> Map paired-ends to a reference genome. Good for identifyind genome modifications: deletions, insertions, etc 
+
+6.Metagenomics sequencing
+Sequencing of genomes from mixed environmental samples like water where more than 1 organism and spicie are present. Can be useful for researches in environemnt. 
+
+7.Molecular barcoding
+Putting a barcode on a read via primers, can be useful to identify specific DNA fragments from different samples or organisms, study repetitive regions and the sequencing is is really long (>10mb).
+
+####################################
+####### POWER POINT 3
+####################################
