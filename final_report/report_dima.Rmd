@@ -153,6 +153,7 @@ Now we are going to filter our data and check it's quality
 ```{r Filtering, include=F}
 arrayQualityMetrics(rawData,  reporttitle="QualityControl", force=TRUE)
 annotation(eset) <- "org.Mm.eg.db"
+
 eset_filtered <- nsFilter(eset, var.func=IQR,
          var.cutoff=0.75, var.filter=TRUE,
          filterByQuantile=TRUE)

@@ -1,0 +1,99 @@
+#################################
+#############Epigenomics#########
+#################################
+Gene expression as a trait: can be inherited, also is effected by environment, random factors and more. 
+
+There are a lot of epigenetic factors that influate in this like:
+-DNA methylation
+-Histone Modifications
+-and more
+
+Epigenetic modifications are suseptible to external influences they are a link between genes and the environemnt providing an adequate mechanism for environment to exert an inheritable influence of a phenotype
+
+CpG islands are part of the genome which is not methylated and helps recruit transcriptor factors, so genes are transcribed. 
+
+Imprinting: unequal expression of the maternal and paternal alleles of a gene, where methylation is a common mechanism for that
+
+Histone modifications may lead to nucleosome modifications which may lead to other DNA modifications leading into different transcrips, different proteins, etc. 
+ ----------------------------------------------------------------------
+|Euchromatin             | vs |  Heterochromatin                       |
+|Closed, DNA inaccessible|    |  Open chromatin                        |
+|Transcription repressed |    |  DNA accessible                        |
+|Due to dense DNA methy- |    |  Transcription activated               |
+|lation                  |    |  Posible because of low DNA methylation|
+ ----------------------------------------------------------------------
+
+Epigenomic tecniques allow is to obtain genome wide data of all known pigenetic modifications - these data can be represented as a matrix where each row is one protein bindning to DNA and column is the position of the genome, this can be than transformed into something more managable by clustering, etc.
+------------------------------------------------------------------------
+lo k queda no creo k es importante
+
+
+#################################
+############Metagenomics#########   ni puta idea este power btw
+#################################
+
+Importance of Metagenomics: 
+-Almost all antibiotics and anticancer drugs are naturally occuring metabolites produced by microbes. Without findning new microbes we  won't find new drugs
+-Microbes in our bodies cause diseas, prevent disease and interact with our diet and genome to modify heir effect on health. Without knowing the microbes of a person curing will be limited
+-Microbes are find inside of many tumors, having knowladge about those microbes will facilitate tratment of tumors
+-One of the best ways to nderstand evolution is to obtain sequences of thousand genomes
+-Microbes are found in water and other environments that can be studies 
+
+
+Problems: know what organism is being sequenced in a sample of many organisms, can be solved by labeling each organism, 16s rRNA sequencing,  total microbiome DNA sequencing
+
+16s rRNA is a part of prokaryotic rybosome and is used in phylogeny because of a slow rate of evolution after PCR we have two options: map/align obtained sequences to known 16s sequences or; cluster similar reads and assume each cluster represent one spicie/s
+ 
+Extracting genomes can be complicated, but since different genomes have different statisticl properties it makes things easier. 
+
+#################################
+############Proteomics###########   
+#################################
+
+Proteom is a complete set of proteins in a particular cell at a given time, as expected it is dynamic and changes during different stages and moments of life of an organism, one gene can encode for more than 1 protein.
+
+What can we do:
+-Protein mining: identification of differernt proteins in a sample
+-Protein Expression Progiling: comarison of expression of different proteins under differernt conditions
+-Protein Network Mapping: approach to look at the interaction between proteins from different systems
+-Mappig of Protein Modificatons: characterization of post-translational modifications and site mutation localization
+
+Basic tools in proteomics:
+-Separations and selection of target proteins
+-Measure of peptide mass
+-Comparison with available databases
+
+
+Separation methods:
+-2D-SDS gel electrophoresis
+- High performance liquid chromatography
+
+Me suda un poco los huevos el pipeline de una cosa de wetlab la vdd
+Where separation is done by weight and charge in different pH gradient
+
+In HPLC analysis cam be done by different methods and those methods can be combined: hydrophobicity, net charge, size, etc.
+
+Next option is to digest protein and work with peptides which have smaller size, this is done because with bigger size, greator errors are done, large hydrophobic proteins difficult to measure, sensitivity of measurements for intact proteins masses not as good as sensitivity for peptide mass
+Optimal size: 6-20 aminoacids
+
+####################
+#preguntas de clase#
+####################
+
+Some Proteis are cleaved at specific sites (or at least known ones)
+
+Mass spectrometry: a method used to identify and quantify compounds, can be used to study protein composition, expression and modifications.
+It is a hard tecnique which makes it less popular. 
+It identifies parts of the protein based on the weight, basing on the reads that are resent, proteins are reconstructed via a database after sequencing of the reads.
+
+##
+more info about how it works, I do not give a signle shit
+just bigger peptides fly slower than the small ones, making the differentciation between the peptides easier
+## 
+
+Peptide mass fingerprint - first tecnique used to identify proteis after mass spectrometry 
+
+
+
+
+

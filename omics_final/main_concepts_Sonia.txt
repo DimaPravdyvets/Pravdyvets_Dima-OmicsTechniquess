@@ -128,3 +128,86 @@ Putting a barcode on a read via primers, can be useful to identify specific DNA 
 ####################################
 ####### POWER POINT 3
 ####################################
+The trascriptome - all the transcripts of a cell and their quantities in a specific stage of development and a given condition
+
+Aims of transcriptome - catalog all types of trascripts; determine transcriptional structure of genes like transcription start sites, UTR, splicing patterns, etc; quantify changes in the levels of expression of each transcript in different moments of a cell.
+
+Why RNA study is so important:
+-Genes and other expressed sequences of a genome 
+-Gene regulation and regulatory sequences 
+-Function of genes and their interaction
+-Functional differences between tissues and cell types
+-Identification of candidate genes for any specific process or disease 
+
+There are two types of experimental methods to analyze the transcriptome are: one single gene, whole transcriptome 
+----------------------------------------------------------------------
+\\\\\
+ESTs - Sequencing cDNA libraries 
+(Expressed sequence tags)
+Obtain cDNA  from reverse transcriptome. create a library out of it, align it to the genome, this alignment will show which are parts specific for genes and other transcribed regions.
+This tecnique can be used for gene annotation
+
+Limitations: 
+-low throughput
+-Elevated cost
+-Quantification is not accurate
+-Different isoforms are generally inistinguishable
+\\\\\
+Microarrays
+-Multiple DNA probes fixed on a glass slide
+-Hybridization of fluorescently-laballed RNA
+This tecnique is used for gene expression arrays, genome tiling arrays, basically showing expression of genes or searching for new transcripts
+Limitations:
+-Lack of reproducibility and standarization
+-Small dynamic range and saturation
+-Relative measures
+-Little information 
+-Inability to detect unknown sequences 
+and for genome tiling arrays also an Elevated cost
+\\\\\
+RNA-seq - new approach for transcriptome profiling that uses deep-sequenccing tecnologies, provides far more precise measurement of levels of transcripts and isoforms than other methods.
+
+Basically whole RNA sequencing using NGS tecnologies:
+-Identification of transcribed sequences
+-Quantification of transcript abundance
+-Multiple reads along each RNA
+-Analysis of alternative transcript isoforms
+
+RNA is mapped into exon-exon junctions, meaning that read sare split by an intron when aligned to a genome of interes
+Advantages of RNA seq are:
+-It is not necessary to know the genomic sequence of transcribed
+regions in advance
+- It allows detecting novel transcripts
+- High precision in the detection of the limits of the transcripts
+- It allows detecting all splicing variants and alternative start and end sites of distinct transcripts
+- It allows detecting SNPs in transcribed regions
+- It allows detecting the specific transcription profiles of each allele
+- Quantification of the levels of expression of each transcript is accurate (long dynamic range)
+- Very reproducible
+- Requires small amount of initial RNA
+
+Transcipts can later be reconstructed by align assembling or de novo assembling, different reconstruction methods can give different type of information 
+
+Also gene expression quantification is a thing which is reported in amount of reads per kb of exonic bases, this can identify differential expression for individual isoforms between conditons
+
+Typical workflow:
+1. Map reads to a reference genome Tophat
+2. Assemble reads into transcripts Cufflinks
+3. Reconcile transcripts across multiple samples Cuffmerge
+4. Quantify isoform expression Cuffdiff
+5. Visualization IGV
+
+-----------------------------------------------------------------------
+
+Transcriptional landscape of a genome 
+
+A protein coding gene can be undergo different splicing which may lead to different outcomes of transcription. This differences in splicicng can be studied by tecniques mentioned before. There is also regulation of this alternative splicing, it can undergo different regulators.
+
+Also non-coding RNA exists. 
+
+
+
+
+
+
+
